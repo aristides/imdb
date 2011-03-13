@@ -1,8 +1,12 @@
 module Imdb
 
   class MovieList
-    def movies
-      @movies ||= parse_movies
+    def movies (movies = nil)
+      if movies.nil?
+        @movies ||= parse_movies
+      else
+        @movies = movies
+      end
     end
     
     private
@@ -22,8 +26,16 @@ module Imdb
         
         title = title.imdb_strip_tags.imdb_unescape_html
         title.gsub!(/\s+\(\d\d\d\d\)$/, '')
-        
-        [id, title]
+
+        #search for the thumb
+        if element.parent.parent.innerHTML =~ /\"(http:.*jpg)\"/
+          thumblink = $1
+        end
+        puts thumblink
+
+#         = Hpricot(element.parent.parent.innerHTML).search('img[@src^="media"]').first['src']
+
+        [id, title, thumblink]
       end.uniq.map do |values|
         Imdb::Movie.new(*values)
       end

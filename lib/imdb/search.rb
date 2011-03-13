@@ -18,6 +18,7 @@ module Imdb
     # Returns an array of Imdb::Movie objects for easy search result yielded.
     # If the +query+ was an exact match, a single element array will be returned.
     def movies
+      puts "!!!!"
       @movies ||= (exact_match? ? parse_movie : parse_movies)
     end
     
@@ -27,18 +28,29 @@ module Imdb
     end
     
     def self.query(query)
-      open("http://www.imdb.com/find?q=#{CGI::escape(query)};s=tt")
+      open("http://www.imdb.pt/find?q=#{CGI::escape(query)};s=tt")
     end
-    
+
+    # Handle the exact mach result
     def parse_movie
       id = document.at("head/link[@rel='canonical']")['href'][/\d+/]
       title = document.at("h1").innerHTML.split('<span').first.strip.imdb_unescape_html
-      [Imdb::Movie.new(id, title)]
+      if  document.at("h1").innerHTML =~ /\(([0-9][0-9][0-9][0-9])\)/
+        year = $1
+      end
+
+      title = "#{title} (#{year})"
+
+      thumblink = document.at("a[@name='poster'] img")['src']
+
+      list = Imdb::MovieList.new
+      list.movies [Imdb::Movie.new(id, title, thumblink)]
+      list
     end
     
     # Returns true if the search yielded only one result, an exact match
     def exact_match?
-      !document.at("//table[@id='title-overview-widget-layout']").nil?
+      !document.at("//div[@id='tn15title']").nil?
     end
     
   end # Search
