@@ -31,7 +31,6 @@ module Imdb
         if element.parent.parent.innerHTML =~ /\"(http:.*jpg)\"/
           thumblink = $1
         end
-        puts thumblink
 
 #         = Hpricot(element.parent.parent.innerHTML).search('img[@src^="media"]').first['src']
 
