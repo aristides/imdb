@@ -43,9 +43,7 @@ module Imdb
 
       thumblink = document.at("a[@name='poster'] img")['src']
 
-      list = Imdb::MovieList.new
-      list.movies [Imdb::Movie.new(id, title, thumblink)]
-      list
+      [Imdb::Movie.new(id, title, thumblink)]
     end
     
     # Returns true if the search yielded only one result, an exact match
