@@ -30,7 +30,7 @@ module Imdb
     
     # Returns the name of the director
     def director
-      document.search("h5[text()^='Director'] ~ a").map { |link| link.innerHTML.strip.imdb_unescape_html } rescue []
+      document.search("h5[text()^='Diretor'] ~ a").map { |link| link.innerHTML.strip.imdb_unescape_html } rescue []
     end
     
     # Returns an array of genres (as strings)
@@ -50,7 +50,8 @@ module Imdb
     
     # Returns a string containing the plot.
     def plot
-      sanitize_plot(document.search("h5[text()='Plot:'] ~ div").first.innerHTML) rescue nil
+      @documentPlot ||= Hpricot(open("http://www.imdb.pt/title/tt#{@id}/plotsummary"))
+      sanitize_plot(document.search("div[@id='swiki.2.view']").first.innerHTML) rescue nil
     end
     
     # Returns a string containing the URL to the movie poster.
@@ -90,7 +91,9 @@ module Imdb
     
     # Returns an integer containing the year (CCYY) the movie was released in.
     def year
-      document.search('a[@href^="/year/"]').innerHTML.to_i
+      if  document.at("h1").innerHTML =~ /\(([0-9][0-9][0-9][0-9])\)/
+        $1.to_i
+      end
     end
     
     # Returns release date for the movie.
@@ -121,13 +124,6 @@ module Imdb
     
     def sanitize_plot(the_plot)
       the_plot = the_plot.imdb_strip_tags
-                                   
-      the_plot = the_plot.gsub(/add\ssummary|full\ssummary/i, "")
-      the_plot = the_plot.gsub(/add\ssynopsis|full\ssynopsis/i, "")
-      the_plot = the_plot.gsub(/&nbsp;|&raquo;/i, "")
-      the_plot = the_plot.gsub(/see|more/i, "")
-      the_plot = the_plot.gsub(/\|/i, "")
-      
       the_plot = the_plot.strip.imdb_unescape_html
     end
     
