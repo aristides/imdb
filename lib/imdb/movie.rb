@@ -51,7 +51,7 @@ module Imdb
     # Returns a string containing the plot.
     def plot
       @documentPlot ||= Hpricot(open("http://www.imdb.pt/title/tt#{@id}/plotsummary"))
-      sanitize_plot(document.search("div[@id='swiki.2.view']").first.innerHTML) rescue nil
+      sanitize_plot(@documentPlot.search("div[@id='swiki.2.view']").first.innerHTML) rescue nil
     end
     
     # Returns a string containing the URL to the movie poster.
