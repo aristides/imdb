@@ -33,9 +33,14 @@ module Imdb
           thumblink = $1
         end
 
+        #search for the movie type
+        if element.parent.innerHTML =~ /\"<small>(.*)<\/small>\"/
+          type = $1
+        end
+
 #         = Hpricot(element.parent.parent.innerHTML).search('img[@src^="media"]').first['src']
 
-        [id, title, thumblink]
+        [id, title, thumblink, type]
       end.uniq.map do |values|
         Imdb::Movie.new(*values)
       end

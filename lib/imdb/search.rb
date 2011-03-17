@@ -42,7 +42,7 @@ module Imdb
 
       thumblink = document.at("a[@name='poster'] img")['src']
 
-      [Imdb::Movie.new(id, title, thumblink)]
+      [Imdb::Movie.new(id, title, thumblink, nil)]
     end
     
     # Returns true if the search yielded only one result, an exact match
