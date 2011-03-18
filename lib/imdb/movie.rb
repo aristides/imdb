@@ -48,7 +48,11 @@ module Imdb
     def length
       document.search("//h5[text()='Runtime:']/..").innerHTML[/\d+ min/].to_i rescue nil
     end
-    
+
+    def type
+        @type ||= document.search("span.tv-extra").first.innerHTML.strip.imdb_unescape_html rescue nil
+    end
+
     # Returns a string containing the plot.
     def plot
       @documentPlot ||= Hpricot(open("http://www.imdb.pt/title/tt#{@id}/plotsummary"))
@@ -117,10 +121,6 @@ module Imdb
     # Convenience method for search
     def self.search(query)
       Imdb::Search.new(query).movies
-    end
-
-    def director
-      document.search("h5[text()^='Diretor'] ~ a").map { |link| link.innerHTML.strip.imdb_unescape_html } rescue []
     end
 
     def self.top_250

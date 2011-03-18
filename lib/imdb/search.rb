@@ -42,7 +42,7 @@ module Imdb
 
       thumblink = document.at("a[@name='poster'] img")['src']
 
-      if element.parent.innerHTML =~ /<small>(.*)<\/small>/ || element.parent.innerHTML =~ /(\(TV\))>/
+      if document.at("h1").parent.innerHTML =~ /<small>(.*)<\/small>/ || document.at("h1").parent.innerHTML =~ /(\(TV\))>/
         type = $1
       end
 
