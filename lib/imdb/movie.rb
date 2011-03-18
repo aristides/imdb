@@ -2,7 +2,7 @@ module Imdb
   
   # Represents a Movie on IMDB.com
   class Movie
-    attr_accessor :id, :url, :title, :thumblink, :type
+    attr_accessor :id, :url, :title, :thumblink
     
     # Initialize a new IMDB movie object with it's IMDB id (as a String)
     #
@@ -12,12 +12,12 @@ module Imdb
     # will be performed when a new object is created. Only when you use an 
     # accessor that needs the remote data, a HTTP request is made (once).
     #
-    def initialize(imdb_id, title, thumblink, type)
+    def initialize(imdb_id, title, thumblink, movie_type)
       @id = imdb_id
       @url = "http://www.imdb.pt/title/tt#{imdb_id}/combined"
       @title = title.gsub(/"/, "") if title
       @thumblink = thumblink
-      @type = type
+      @movie_type = movie_type
     end
     
     # Returns an array with cast members
@@ -49,7 +49,7 @@ module Imdb
       document.search("//h5[text()='Runtime:']/..").innerHTML[/\d+ min/].to_i rescue nil
     end
 
-    def type
+    def movie_type
         @type ||= document.search("span.tv-extra").first.innerHTML.strip.imdb_unescape_html rescue nil
     end
 
