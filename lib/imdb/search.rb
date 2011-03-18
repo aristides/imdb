@@ -45,7 +45,7 @@ module Imdb
       if element.parent.innerHTML =~ /<small>(.*)<\/small>/
         type = $1
       elsif element.parent.innerHTML =~ /(\(TV\))>/
-        type = '(TV)'
+        type = $1
       end
 
       [Imdb::Movie.new(id, title, thumblink, type)]
