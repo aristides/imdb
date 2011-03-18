@@ -34,9 +34,12 @@ module Imdb
         end
 
         #search for the movie type
-        if element.parent.innerHTML =~ /\"<small>(.*)<\/small>\"/
+        if element.parent.innerHTML =~ /<small>(.*)<\/small>/
           type = $1
+        elsif element.parent.innerHTML =~ /(\(TV\))>/
+          type = '(TV)'
         end
+
 
 #         = Hpricot(element.parent.parent.innerHTML).search('img[@src^="media"]').first['src']
 

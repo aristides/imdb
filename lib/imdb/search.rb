@@ -42,7 +42,13 @@ module Imdb
 
       thumblink = document.at("a[@name='poster'] img")['src']
 
-      [Imdb::Movie.new(id, title, thumblink, nil)]
+      if element.parent.innerHTML =~ /<small>(.*)<\/small>/
+        type = $1
+      elsif element.parent.innerHTML =~ /(\(TV\))>/
+        type = '(TV)'
+      end
+
+      [Imdb::Movie.new(id, title, thumblink, type)]
     end
     
     # Returns true if the search yielded only one result, an exact match
